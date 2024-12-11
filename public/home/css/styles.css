@@ -12622,19 +12622,19 @@ fieldset:disabled .btn {
 }
 
 .rzw-bg-laravel {
-    background: #F9322C !important;
+    background: #F9322C;
     color: #fff;
 }
 
 .rzw-bg-laravel-light {
-    background: #fff !important;
+    background: #fff;
     color: #FF3B30;
     font-weight: 450 !important;
 }
 
 .rzw-bg-laravel-light:hover {
-    background: #FF3B30 !important;
-    color: #fff !important;
+    background: #fff !important;
+    color: #FF3B30 !important;
 }
 
 .rzw-btn {

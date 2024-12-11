@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ProdukModel;
+use App\Models\CartModel;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -11,15 +14,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home.content.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $produks = ProdukModel::all();
+        $cart = [];
+        if (Auth::check()) {
+            $cart = CartModel::where('user_id', auth()->user()->id)->get();
+        }
+        return view('home.content.index', compact('produks', 'cart'));
     }
 
     /**
