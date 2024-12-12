@@ -11,4 +11,7 @@ Route::get('/cart', [App\Http\Controllers\ProdukController::class, 'cart'])->nam
 Route::post('/cart', [App\Http\Controllers\ProdukController::class, 'cart']);
 Route::get('/addtocart/{produk_id}', [App\Http\Controllers\ProdukController::class, 'addtocart']);
 Route::get('/deletecart/{cart_id}', [App\Http\Controllers\ProdukController::class, 'deletecart']);
+Route::get('/checkout', [App\Http\Controllers\ProdukController::class, 'checkout'])->name('checkout');
+Route::get('/payment/{id}', [App\Http\Controllers\ProdukController::class, 'showPayment']);
+Route::get('/history', [App\Http\Controllers\ProdukController::class, 'history']);
 

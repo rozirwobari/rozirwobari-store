@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Animated Bootstrap Table</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        .table-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            perspective: 1000px;
+        }
+        
+        .table {
+            transform-style: preserve-3d;
+            animation: tableAppear 1s ease-out forwards;
+        }
+
+        @keyframes tableAppear {
+            0% {
+                transform: rotateX(30deg) translateY(-100px);
+                opacity: 0;
+            }
+            100% {
+                transform: rotateX(0) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .table-row {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .table-row.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .table-row:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+            background-color: #f8f9fa;
+        }
+        
+        .table th {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .table th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #007bff;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .table th:hover::after {
+            transform: translateX(0);
+        }
+        
+        .table th:hover {
+            background-color: #343a40;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .sort-icon {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 5px;
+            vertical-align: middle;
+            border-right: 4px solid transparent;
+            border-left: 4px solid transparent;
+            transition: transform 0.3s ease;
+        }
+        
+        .sort-asc .sort-icon {
+            border-bottom: 4px solid #fff;
+            transform: translateY(3px);
+        }
+        
+        .sort-desc .sort-icon {
+            border-top: 4px solid #fff;
+            transform: translateY(-3px);
+        }
+        
+        .search-container {
+            margin-bottom: 1.5rem;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: searchAppear 0.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes searchAppear {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .search-container input {
+            transition: all 0.3s ease;
+            border: 2px solid #dee2e6;
+        }
+        
+        .search-container input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+        
+        .highlight {
+            animation: highlightPulse 1.5s infinite;
+        }
+
+        @keyframes highlightPulse {
+            0% { background-color: #fff3cd; }
+            50% { background-color: #ffe69c; }
+            100% { background-color: #fff3cd; }
+        }
+
+        .cell-animation {
+            animation: cellUpdate 0.5s ease-out;
+        }
+
+        @keyframes cellUpdate {
+            0% { background-color: #28a745; color: white; }
+            100% { background-color: transparent; color: inherit; }
+        }
+
+        /* Row delete animation */
+        .table-row.remove {
+            animation: removeRow 0.5s ease-out forwards;
+        }
+
+        @keyframes removeRow {
+            0% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Row add animation */
+        .table-row.add {
+            animation: addRow 0.5s ease-out forwards;
+        }
+
+        @keyframes addRow {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <div class="search-container">
+            <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+        </div>
+        
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th data-sort="id">ID <span class="sort-icon"></span></th>
+                    <th data-sort="name">Name <span class="sort-icon"></span></th>
+                    <th data-sort="position">Position <span class="sort-icon"></span></th>
+                    <th data-sort="office">Office <span class="sort-icon"></span></th>
+                    <th data-sort="salary">Salary <span class="sort-icon"></span></th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Data will be populated by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="text-center mt-3">
+            <button class="btn btn-primary" id="addRowBtn">Add Random Row</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data
+        const data = [
+            { id: 1, name: "John Doe", position: "Developer", office: "New York", salary: 85000 },
+            { id: 2, name: "Jane Smith", position: "Designer", office: "London", salary: 72000 },
+            { id: 3, name: "Bob Johnson", position: "Manager", office: "Tokyo", salary: 95000 },
+            { id: 4, name: "Alice Brown", position: "Developer", office: "Paris", salary: 78000 },
+            { id: 5, name: "Charlie Wilson", position: "Analyst", office: "Sydney", salary: 68000 }
+        ];
+
+        let sortColumn = 'id';
+        let sortDirection = 'asc';
+
+        // Function to render table data
+        function renderTable(tableData) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            tableData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = 'table-row';
+                
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.position}</td>
+                    <td>${item.office}</td>
+                    <td>$${item.salary.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger delete-btn">Delete</button>
+                    </td>
+                `;
+
+                // Add delete functionality
+                row.querySelector('.delete-btn').addEventListener('click', () => {
+                    row.classList.add('remove');
+                    setTimeout(() => {
+                        const index = data.findIndex(d => d.id === item.id);
+                        if (index > -1) {
+                            data.splice(index, 1);
+                            renderTable(data);
+                        }
+                    }, 500);
+                });
+
+                tableBody.appendChild(row);
+                
+                // Add animation with delay based on index
+                setTimeout(() => {
+                    row.classList.add('show');
+                }, index * 150);
+            });
+        }
+
+        // Sort function
+        function sortData(column) {
+            const headers = document.querySelectorAll('th');
+            headers.forEach(header => {
+                if (header.dataset.sort === column) {
+                    header.classList.toggle('sort-asc', sortDirection === 'asc');
+                    header.classList.toggle('sort-desc', sortDirection === 'desc');
+                } else {
+                    header.classList.remove('sort-asc', 'sort-desc');
+                }
+            });
+
+            const sortedData = [...data].sort((a, b) => {
+                const aValue = a[column];
+                const bValue = b[column];
+
+                if (typeof aValue === 'string') {
+                    return sortDirection === 'asc' 
+                        ? aValue.localeCompare(bValue)
+                        : bValue.localeCompare(aValue);
+                }
+
+                return sortDirection === 'asc' 
+                    ? aValue - bValue 
+                    : bValue - aValue;
+            });
+
+            renderTable(sortedData);
+        }
+
+        // Search function with highlight
+        function searchTable(searchTerm) {
+            const filteredData = data.filter(item => 
+                Object.values(item).some(value => 
+                    value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                )
+            );
+            renderTable(filteredData);
+
+            if (searchTerm) {
+                setTimeout(() => {
+                    const cells = document.querySelectorAll('td');
+                    cells.forEach(cell => {
+                        if (cell.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
+                            cell.classList.add('highlight');
+                        }
+                    });
+                }, 100);
+            }
+        }
+
+        // Add random row function
+        function addRandomRow() {
+            const positions = ['Developer', 'Designer', 'Manager', 'Analyst', 'Engineer'];
+            const offices = ['New York', 'London', 'Tokyo', 'Paris', 'Sydney', 'Berlin', 'Singapore'];
+            const names = ['Michael Scott', 'Pam Beesly', 'Jim Halpert', 'Dwight Schrute', 'Angela Martin'];
+
+            const newRow = {
+                id: data.length + 1,
+                name: names[Math.floor(Math.random() * names.length)],
+                position: positions[Math.floor(Math.random() * positions.length)],
+                office: offices[Math.floor(Math.random() * offices.length)],
+                salary: Math.floor(Math.random() * 50000) + 50000
+            };
+
+            data.push(newRow);
+            renderTable(data);
+
+            // Add 'add' animation class to the new row
+            setTimeout(() => {
+                const lastRow = document.querySelector('.table-row:last-child');
+                lastRow.classList.add('add');
+            }, 0);
+        }
+
+        // Event Listeners
+        document.querySelectorAll('th[data-sort]').forEach(header => {
+            header.addEventListener('click', () => {
+                const column = header.dataset.sort;
+                if (sortColumn === column) {
+                    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortColumn = column;
+                    sortDirection = 'asc';
+                }
+                sortData(column);
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchTable(e.target.value);
+        });
+
+        document.getElementById('addRowBtn').addEventListener('click', addRandomRow);
+
+        // Initial render
+        renderTable(data);
+
+        // Add hover effect for entire row
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.tagName === 'TD') {
+                const row = e.target.parentElement;
+                row.style.transform = 'scale(1.02)';
+                row.style.zIndex = '1';
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.tagName === 'TD') {
+                const row = e.target.parentElement;
+                row.style.transform = '';
+                row.style.zIndex = '';
+            }
+        });
+    </script>
+</body>
+</html>

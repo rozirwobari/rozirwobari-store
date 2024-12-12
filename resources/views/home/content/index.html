@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Template</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .invoice-title {
+            border-bottom: 2px solid #eee;
+        }
+        
+        .table-borderless td {
+            padding: 8px 0;
+        }
+        
+        @media print {
+            .no-print {
+                display: none;
+            }
+            .card {
+                border: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <!-- Header -->
+                <div class="row mb-4">
+                    <div class="col-sm-6">
+                        <h2 class="mb-3">INVOICE</h2>
+                        <h6 class="text-muted">Invoice #: INV-2024001</h6>
+                        <h6 class="text-muted">Date: <span id="currentDate"></span></h6>
+                    </div>
+                    <div class="col-sm-6 text-sm-end">
+                        <h4 class="text-primary mb-3">Your Company Name</h4>
+                        <div>123 Business Street</div>
+                        <div>City, State 12345</div>
+                        <div>Phone: (123) 456-7890</div>
+                        <div>Email: info@yourcompany.com</div>
+                    </div>
+                </div>
+
+                <!-- Client Info -->
+                <div class="row mb-4">
+                    <div class="col-sm-6">
+                        <h6 class="mb-3">Bill To:</h6>
+                        <div><strong>Client Name</strong></div>
+                        <div>Client Company</div>
+                        <div>456 Client Street</div>
+                        <div>Client City, State 67890</div>
+                        <div>client@email.com</div>
+                    </div>
+                </div>
+
+                <!-- Items Table -->
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-end">Rate</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTable">
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="Item description">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control text-center item-quantity" value="1">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control text-end item-rate" value="0">
+                                </td>
+                                <td class="text-end item-amount">$0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Add Item Button -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <button class="btn btn-primary btn-sm no-print" onclick="addItem()">+ Add Item</button>
+                    </div>
+                </div>
+
+                <!-- Totals -->
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>Subtotal:</strong></td>
+                                <td class="text-end" id="subtotal">$0.00</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tax (10%):</strong></td>
+                                <td class="text-end" id="tax">$0.00</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total:</strong></td>
+                                <td class="text-end"><strong id="total">$0.00</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <p><strong>Notes:</strong></p>
+                        <p class="text-muted">Thank you for your business! Payment is due within 30 days.</p>
+                    </div>
+                </div>
+
+                <!-- Print Button -->
+                <div class="row mt-4 no-print">
+                    <div class="col-12">
+                        <button class="btn btn-success" onclick="window.print()">Print Invoice</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
+
+        // Add new item row
+        function addItem() {
+            const newRow = `
+                <tr>
+                    <td><input type="text" class="form-control" placeholder="Item description"></td>
+                    <td><input type="number" class="form-control text-center item-quantity" value="1"></td>
+                    <td><input type="number" class="form-control text-end item-rate" value="0"></td>
+                    <td class="text-end item-amount">$0.00</td>
+                </tr>
+            `;
+            document.getElementById('itemsTable').insertAdjacentHTML('beforeend', newRow);
+            attachEventListeners();
+        }
+
+        // Calculate totals
+        function calculateTotals() {
+            let subtotal = 0;
+            document.querySelectorAll('#itemsTable tr').forEach(row => {
+                const quantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
+                const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+                const amount = quantity * rate;
+                row.querySelector('.item-amount').textContent = `$${amount.toFixed(2)}`;
+                subtotal += amount;
+            });
+
+            const tax = subtotal * 0.1;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Attach event listeners to inputs
+        function attachEventListeners() {
+            document.querySelectorAll('.item-quantity, .item-rate').forEach(input => {
+                input.addEventListener('input', calculateTotals);
+            });
+        }
+
+        // Initial setup
+        attachEventListeners();
+    </script>
+</body>
+</html>

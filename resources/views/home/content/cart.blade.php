@@ -178,7 +178,7 @@
                 </div>
                 <div class="text-end pt-3">
                     <span class="rzw-btn-border product-card">
-                        <a href="{{ route('login') }}" class="btn rzw-btn rzw-bg-laravel text-center w-100">
+                        <a href="{{ url('/checkout') }}" class="btn rzw-btn rzw-bg-laravel text-center w-100">
                             Checkout
                             <i class="bi bi-arrow-right-circle"></i>
                         </a>
@@ -237,5 +237,25 @@
 @endsection
 
 @section('js')
-
+    {{-- <script>
+        document.getElementById('rzw-payment').onclick = function() {
+            snap.pay('{{ $snapToken }}', {
+                onSuccess: function(result) {
+                    alert('Payment success!');
+                    console.log(result);
+                },
+                onPending: function(result) {
+                    alert('Payment pending!');
+                    console.log(result);
+                },
+                onError: function(result) {
+                    alert('Payment failed!');
+                    console.log(result);
+                },
+                onClose: function() {
+                    alert('You closed the popup without finishing the payment');
+                }
+            });
+        };
+    </script> --}}
 @endsection

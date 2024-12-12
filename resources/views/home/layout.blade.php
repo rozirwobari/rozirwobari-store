@@ -13,9 +13,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('home/css/styles.css') }}" rel="stylesheet" />
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 </head>
 
 @yield('css')
+
+<style>
+    ::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+</style>
 
 <body>
     @php
