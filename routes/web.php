@@ -13,6 +13,6 @@ Route::get('/addtocart/{produk_id}', [App\Http\Controllers\ProdukController::cla
 Route::get('/deletecart/{cart_id}', [App\Http\Controllers\ProdukController::class, 'deletecart']);
 Route::get('/checkout', [App\Http\Controllers\ProdukController::class, 'checkout'])->name('checkout');
 Route::get('/payment/{id}', [App\Http\Controllers\ProdukController::class, 'showPayment']);
-Route::get('/history', [App\Http\Controllers\ProdukController::class, 'history']);
+Route::get('/history', [App\Http\Controllers\ProdukController::class, 'history'])->name('history');
 Route::get('/cancel-payment/{id}', [App\Http\Controllers\ProdukController::class, 'cancelPayment']);
 

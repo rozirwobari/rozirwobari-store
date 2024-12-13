@@ -76,9 +76,6 @@ class MidtransController extends Controller
             $transaksi->update();
         }
         return response()->json($transaksi, 201);
-        // return response()->json([
-        //     'message' => 'Berhasil Di Update'
-        // ], 201);
     }
 
     /**
