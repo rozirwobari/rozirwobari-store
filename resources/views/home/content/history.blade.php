@@ -196,7 +196,7 @@
                             <tr class="product-card" style="animation-delay: {{ $loop->index * 0.2 }}s">
                                 <td><a href="{{ url('/payment/' . $item->id_transaksi) }}"
                                         class="text-decoration-none">{{ $item->id_transaksi }}</a></td>
-                                <td>{{ $item->created_at }}</td>
+                                <td>{{ formatTanggal($item->created_at) }}</td>
                                 <td>Rp. {{ number_format($item->total, 0, ',', '.') }}</td>
                                 <td>{{ count(json_decode($item->data)) }} Produk</td>
                                 <td class="text-center">
@@ -208,8 +208,8 @@
                                                 : ($item->status == 2
                                                     ? 'danger'
                                                     : ($item->status == 3
-                                                        ? 'danger'
-                                                        : 'danger'))) }}">
+                                                        ? 'orange'
+                                                        : 'orange'))) }}">
                                         {{ $item->status == 0
                                             ? 'Pending'
                                             : ($item->status == 1

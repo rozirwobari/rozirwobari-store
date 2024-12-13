@@ -8,6 +8,8 @@ use App\Models\CartModel;
 use App\Models\TransaksiModel;
 use Midtrans\Config;
 use Midtrans\Snap;
+use Midtrans\Transaction;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
 class ProdukController extends Controller
@@ -68,9 +70,32 @@ class ProdukController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function cancelPayment($id_transaksi)
     {
-        //
+        try {
+            $baseUrl = Config::$isProduction 
+                ? "https://api.midtrans.com/v2" 
+                : "https://api.sandbox.midtrans.com/v2";
+        
+            $response = Http::withBasicAuth(Config::$serverKey, '')
+                ->post("$baseUrl/$id_transaksi/cancel");
+
+            $transaksi = TransaksiModel::where('id_transaksi', $id_transaksi)->first();
+            $transaksi->status = 2;
+            $transaksi->status_label = 'Cancel';
+            $transaksi->update();
+            return redirect()->back()->with('alert', [
+                'type' => 'success',
+                'message' => 'Transaksi berhasil dibatalkan',
+                'title' => 'Berhasil!'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('alert', [
+                'type' => 'danger',
+                'message' => 'Transaksi gagal dibatalkan',
+                'title' => 'Oops!'
+            ]);
+        }
     }
 
     /**
@@ -78,8 +103,9 @@ class ProdukController extends Controller
      */
     public function history()
     {
-        $transaksi = TransaksiModel::where('user_id', Auth::user()->id)->get();
-        return view('home.content.history', compact('transaksi'));
+        $transaksi = TransaksiModel::where('user_id', Auth::user()->id)->latest()->get();
+        $cart = CartModel::where('user_id', auth()->user()->id)->get();
+        return view('home.content.history', compact('transaksi', 'cart'));
     }
 
 

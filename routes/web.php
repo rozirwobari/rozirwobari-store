@@ -14,4 +14,5 @@ Route::get('/deletecart/{cart_id}', [App\Http\Controllers\ProdukController::clas
 Route::get('/checkout', [App\Http\Controllers\ProdukController::class, 'checkout'])->name('checkout');
 Route::get('/payment/{id}', [App\Http\Controllers\ProdukController::class, 'showPayment']);
 Route::get('/history', [App\Http\Controllers\ProdukController::class, 'history']);
+Route::get('/cancel-payment/{id}', [App\Http\Controllers\ProdukController::class, 'cancelPayment']);
 

@@ -12688,3 +12688,8 @@ fieldset:disabled .btn {
     box-shadow: 0 4px 20px #f9322c4d !important;
     transform: scale(1.02);
 }
+
+.text-bg-orange {
+    color: #fff !important;
+    background-color: #ff0000 !important;
+}

@@ -244,7 +244,8 @@
                         <div class="col-sm-6">
                             <h2 class="mb-3">INVOICE</h2>
                             <h6 class="text-muted">Invoice <strong>{{ $transaksi->id_transaksi }}</strong></h6>
-                            <h6 class="text-muted">Date: <span id="currentDate">{{ $transaksi->created_at }}</span></h6>
+                            <h6 class="text-muted">Date: <span
+                                    id="currentDate">{{ formatTanggal($transaksi->created_at) }}</span></h6>
                         </div>
                         <div class="col-sm-6 text-sm-end">
                             <h4 class="mb-3" style="color: #FF3B30;">RZW Store</h4>
@@ -374,12 +375,21 @@
                         </div>
                         @if ($transaksi->status == 0)
                             <div class="row p-1">
-                                <div class="col-12">
+                                <div class="col-6">
                                     <span class="rzw-btn-border product-card w-100">
                                         <a class="btn rzw-btn rzw-bg-laravel text-center w-100"
-                                            style="background: #ffa200; color: black;" href="{{ url('/history') }}">
+                                            href="{{ url('/history') }}">
                                             <i class="bi bi-printer-fill"></i>
                                             Riwayat Transaksi
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="col-6">
+                                    <span class="rzw-btn-border product-card w-100">
+                                        <a class="btn rzw-btn rzw-bg-laravel-light text-center w-100"
+                                            href="{{ url('/cancel-payment/' . $transaksi->id_transaksi) }}">
+                                            <i class="bi bi-x-octagon"></i>
+                                            Batalkan
                                         </a>
                                     </span>
                                 </div>
