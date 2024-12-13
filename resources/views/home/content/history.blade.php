@@ -201,8 +201,24 @@
                                 <td>{{ count(json_decode($item->data)) }} Produk</td>
                                 <td class="text-center">
                                     <span
-                                        class="badge rounded-pill text-bg-{{ $item->status == 0 ? 'warning' : ($item->status == 2 ? 'danger' : 'success') }}">
-                                        {{ $item->status == 0 ? 'Pending' : ($item->status == 2 ? 'Cancelled' : 'Lunas') }}
+                                        class="badge rounded-pill text-bg-{{ $item->status == 0
+                                            ? 'warning'
+                                            : ($item->status == 1
+                                                ? 'success'
+                                                : ($item->status == 2
+                                                    ? 'danger'
+                                                    : ($item->status == 3
+                                                        ? 'danger'
+                                                        : 'danger'))) }}">
+                                        {{ $item->status == 0
+                                            ? 'Pending'
+                                            : ($item->status == 1
+                                                ? 'Lunas'
+                                                : ($item->status == 2
+                                                    ? 'Cancelled'
+                                                    : ($item->status == 3
+                                                        ? 'Kadaluarsa'
+                                                        : 'Unknown'))) }}
                                     </span>
                                 </td>
                                 <td class="text-center">

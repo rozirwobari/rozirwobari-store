@@ -42,7 +42,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-25deg);
-            opacity: 0.6;
+            opacity: 0.3;
             font-size: 65px;
             font-weight: bold;
             color: #FF3B30;
@@ -360,7 +360,7 @@
                                 </div>
                             @endif
 
-                            @if ($transaksi->status == 1 || $transaksi->status == 2)
+                            @if ($transaksi->status == 1 || $transaksi->status == 2 || $transaksi->status == 3)
                                 <div class="col-6">
                                     <span class="rzw-btn-border product-card w-100">
                                         <a class="btn rzw-btn rzw-bg-laravel-light text-center w-100"

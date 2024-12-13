@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('total')->default(0);
             $table->mediumText('snap_token')->nullable();
             $table->mediumText('reason')->nullable();
-            $table->tinyInteger('status', 1)->default(0);
+            $table->tinyInteger('status')->length(1)->default(0);
             $table->string('status_label', 250)->default('Pending');
             $table->string('payment', 200)->nullable();
             $table->json('data')->default('[]');
