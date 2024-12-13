@@ -200,6 +200,17 @@
                     @enderror
                 </div>
                 <div class="mb-3">
+                    <label for="phone" class="form-label">Nomor HP</label>
+                    <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone"
+                        name="phone" placeholder="Masukan Nomor HP" style="border-radius: 0; border-color: #F9322C;"
+                        value="{{ old('phone') }}" required>
+                    @error('phone')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
                         name="password" placeholder="Masukan Password" style="border-radius: 0; border-color: #F9322C;"
