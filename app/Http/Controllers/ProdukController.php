@@ -238,6 +238,9 @@ class ProdukController extends Controller
 
     public function showPayment($id_transaksi)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
         $transaksi = TransaksiModel::where('id_transaksi', $id_transaksi)->first();
         if (!$transaksi) {
             return redirect()->route('history')->with('alert', [
