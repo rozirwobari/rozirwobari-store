@@ -226,6 +226,11 @@ class ProdukController extends Controller
         try {
             $snapToken = Snap::getSnapToken($params);
             $transaksi->snap_token = $snapToken;
+            $transaksi->data_user = json_encode([
+                'name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+                'phone' => Auth::user()->phone,
+            ]);
             $transaksi->save();
             $cart = CartModel::where('user_id', Auth::user()->id)->delete();
             return redirect()->to("/payment/{$order_id}");

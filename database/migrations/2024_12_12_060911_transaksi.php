@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('payment', 200)->nullable();
             $table->json('data')->default('[]');
             $table->json('data_pay')->default('[]');
+            $table->json('data_user')->default('[]');
             $table->timestamps();
         });
     }

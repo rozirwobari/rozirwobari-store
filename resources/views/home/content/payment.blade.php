@@ -258,10 +258,13 @@
                     <!-- Client Info -->
                     <div class="row mb-4">
                         <div class="col-sm-6">
+                            @php
+                                $data_user = json_decode($transaksi->data_user, true);
+                            @endphp
                             <h6 class="mb-3">Bill To:</h6>
-                            <div><strong>{{ Auth::user()->name }}</strong></div>
-                            <div>{{ Auth::user()->email }}</div>
-                            <div>{{ Auth::user()->phone }}</div>
+                            <div><strong>{{ $data_user['name'] }}</strong></div>
+                            <div>{{ $data_user['email'] }}</div>
+                            <div>{{ $data_user['phone'] }}</div>
                         </div>
                     </div>
 
