@@ -243,9 +243,9 @@ class ProdukController extends Controller
 
     public function showPayment($id_transaksi)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+        // if (!Auth::check()) {
+        //     return redirect()->route('login');
+        // }
         $transaksi = TransaksiModel::where('id_transaksi', $id_transaksi)->first();
         if (!$transaksi) {
             return redirect()->route('history')->with('alert', [
@@ -255,13 +255,13 @@ class ProdukController extends Controller
             ]);
         }
 
-        if ($transaksi->user_id != Auth::user()->id) {
-            return redirect()->route('history')->with('alert', [
-                'type' => 'danger',
-                'message' => 'Transaksi Bukan Milik Kamu',
-                'title' => 'Oops!'
-            ]);
-        }
+        // if ($transaksi->user_id != Auth::user()->id) {
+        //     return redirect()->route('history')->with('alert', [
+        //         'type' => 'danger',
+        //         'message' => 'Transaksi Bukan Milik Kamu',
+        //         'title' => 'Oops!'
+        //     ]);
+        // }
         return view('home.content.payment', compact('transaksi'));
     }
 }

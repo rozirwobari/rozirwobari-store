@@ -343,62 +343,64 @@
                     </div>
 
                     <!-- Print Button -->
-                    <div class="mt-4 no-print text-center">
-                        <div class="row p-1">
-                            <div class="col-6">
-                                <span class="rzw-btn-border product-card w-100">
-                                    <button class="btn rzw-btn rzw-bg-laravel-light text-center w-100"
-                                        onclick="window.print()">
-                                        <i class="bi bi-printer-fill"></i>
-                                        Print
-                                    </button>
-                                </span>
-                            </div>
-                            @if ($transaksi->status == 0)
-                                <div class="col-6">
-                                    <span class="rzw-btn-border product-card w-100" id="rzw-payment">
-                                        <button class="btn rzw-btn rzw-bg-laravel text-center w-100">
-                                            Pay
-                                        </button>
-                                    </span>
-                                </div>
-                            @endif
-
-                            @if ($transaksi->status == 1 || $transaksi->status == 2 || $transaksi->status == 3)
-                                <div class="col-6">
-                                    <span class="rzw-btn-border product-card w-100">
-                                        <a class="btn rzw-btn rzw-bg-laravel-light text-center w-100"
-                                            href="{{ url('/history') }}">
-                                            <i class="bi bi-clock-history"></i>
-                                            Riwayat Transaksi
-                                        </a>
-                                    </span>
-                                </div>
-                            @endif
-                        </div>
-                        @if ($transaksi->status == 0)
+                    @if (Auth::check() && $transaksi->user_id == Auth::user()->id)
+                        <div class="mt-4 no-print text-center">
                             <div class="row p-1">
                                 <div class="col-6">
                                     <span class="rzw-btn-border product-card w-100">
-                                        <a class="btn rzw-btn rzw-bg-laravel text-center w-100"
-                                            href="{{ url('/history') }}">
+                                        <button class="btn rzw-btn rzw-bg-laravel-light text-center w-100"
+                                            onclick="window.print()">
                                             <i class="bi bi-printer-fill"></i>
-                                            Riwayat Transaksi
-                                        </a>
+                                            Print
+                                        </button>
                                     </span>
                                 </div>
-                                <div class="col-6">
-                                    <span class="rzw-btn-border product-card w-100">
-                                        <a class="btn rzw-btn rzw-bg-laravel-light text-center w-100"
-                                            href="{{ url('/cancel-payment/' . $transaksi->id_transaksi) }}">
-                                            <i class="bi bi-x-octagon"></i>
-                                            Batalkan
-                                        </a>
-                                    </span>
-                                </div>
+                                @if ($transaksi->status == 0)
+                                    <div class="col-6">
+                                        <span class="rzw-btn-border product-card w-100" id="rzw-payment">
+                                            <button class="btn rzw-btn rzw-bg-laravel text-center w-100">
+                                                Pay
+                                            </button>
+                                        </span>
+                                    </div>
+                                @endif
+
+                                @if ($transaksi->status == 1 || $transaksi->status == 2 || $transaksi->status == 3)
+                                    <div class="col-6">
+                                        <span class="rzw-btn-border product-card w-100">
+                                            <a class="btn rzw-btn rzw-bg-laravel-light text-center w-100"
+                                                href="{{ url('/history') }}">
+                                                <i class="bi bi-clock-history"></i>
+                                                Riwayat Transaksi
+                                            </a>
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-                    </div>
+                            @if ($transaksi->status == 0)
+                                <div class="row p-1">
+                                    <div class="col-6">
+                                        <span class="rzw-btn-border product-card w-100">
+                                            <a class="btn rzw-btn rzw-bg-laravel text-center w-100"
+                                                href="{{ url('/history') }}">
+                                                <i class="bi bi-printer-fill"></i>
+                                                Riwayat Transaksi
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="rzw-btn-border product-card w-100">
+                                            <a class="btn rzw-btn rzw-bg-laravel-light text-center w-100"
+                                                href="{{ url('/cancel-payment/' . $transaksi->id_transaksi) }}">
+                                                <i class="bi bi-x-octagon"></i>
+                                                Batalkan
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

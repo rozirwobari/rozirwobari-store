@@ -16,6 +16,33 @@
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 </head>
 
+
+<style>
+    @font-face {
+        font-family: 'Scandia';
+        src: url('/fonts/Scandia/Scandia-Regular.eot');
+        src: local('Scandia Regular'), local('Scandia-Regular'),
+            url('/fonts/Scandia/Scandia-Regular.eot?#iefix') format('embedded-opentype'),
+            url('/fonts/Scandia/Scandia-Regular.woff2') format('woff2'),
+            url('/fonts/Scandia/Scandia-Regular.woff') format('woff'),
+            url('/fonts/Scandia/Scandia-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Scandia';
+        src: url('/fonts/Scandia/Scandia-Bold.eot');
+        src: local('Scandia Bold'), local('Scandia-Bold'),
+            url('/fonts/Scandia/Scandia-Bold.eot?#iefix') format('embedded-opentype'),
+            url('/fonts/Scandia/Scandia-Bold.woff2') format('woff2'),
+            url('/fonts/Scandia/Scandia-Bold.woff') format('woff'),
+            url('/fonts/Scandia/Scandia-Bold.ttf') format('truetype');
+        font-weight: bold;
+        font-style: normal;
+    }
+</style>
+
 @yield('css')
 
 <style>
