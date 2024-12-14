@@ -89,6 +89,7 @@ class MidtransController extends Controller
         if ($transaksi) {
             if ($request->transaction_status == 'settlement') {
                 $transaksi->status = 1;
+                $transaksi->payment = $request->payment_type;
                 $transaksi->status_label = 'Paid';
             } else if ($request->transaction_status == 'cancel') {
                 $transaksi->status = 2;
@@ -98,6 +99,7 @@ class MidtransController extends Controller
                 $transaksi->status_label = 'Kadaluarsa';
             } else if ($request->transaction_status == 'pending') {
                 $transaksi->status = 0;
+                $transaksi->payment = $request->payment_type;
                 $transaksi->status_label = 'Pending';
             } else {
                 return response()->json([
