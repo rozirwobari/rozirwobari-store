@@ -59,7 +59,7 @@ class MidtransController extends Controller
         
         // Buat signature key
         $signatureKey = $orderId . $statusCode . $grossAmount . $serverKey;
-        
+
         // Generate signature
         $calculatedSignature = hash('sha512', $signatureKey);
         
@@ -74,7 +74,7 @@ class MidtransController extends Controller
     {
         try {
             // Ambil signature dari header
-            $receivedSignature = $request->header('X-SIGNATURE');
+            $receivedSignature = $request->signature_key;
             
             if (!$receivedSignature) {
                 Log::warning('Midtrans notification received without signature');
